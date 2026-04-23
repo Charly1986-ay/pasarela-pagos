@@ -1,0 +1,43 @@
+*.pyo
+*.pyd
+*.pyc
+
+# -----------------------------
+# Configuración de entorno
+# -----------------------------
+.env
+*.env
+.venv
+
+# -----------------------------
+# Bases de datos locales
+# -----------------------------
+*.sqlite
+*.db
+*.db-journal
+
+# -----------------------------
+# Archivos de medios / uploads
+# -----------------------------
+app/media/
+uploads/
+static/uploads/
+
+# -----------------------------
+# Logs
+# -----------------------------
+*.log
+
+# -----------------------------
+# IDE / editores
+# -----------------------------
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# -----------------------------
+# Sistemas operativos
+# -----------------------------
+.DS_Store
+Thumbs.db
