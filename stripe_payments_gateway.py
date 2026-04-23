@@ -27,12 +27,13 @@ def create_payment_method() -> str:
 
 
 # crear un pago
-def create_payment(payment_method_id):
+def create_payment(client_id: str, payment_method_id: str):
     try:
         payment=stripe.PaymentIntent.create(
             # OJO sea usd o euros hay que convertirlos en CENTIMOS
             amount=5 * 100, # se multiplica por 100
             currency='usd',
+            customer=client_id,
             payment_method=payment_method_id,
             payment_method_types=['card'],
             confirm=True
@@ -44,5 +45,43 @@ def create_payment(payment_method_id):
     except stripe.StripeError as e:
         print(f'Error en stripe: {e.user_message}')
 
+
+# creacion de usuario segun al api stripe
+def create_user(name: str, email:str):
+    try:
+        client = stripe.Customer.create(
+            name=name,
+            email=email
+        )
+        print(f'Cliente {client.name} creado correctamente con ID: {client.id}')
+
+        return client.id
+    except stripe.StripeError as e:
+        print(f'Error en stripe: {e.user_message}')
+
+
+# Asociar el método de pago al usuario
+def add_payment_method_to_user(client_id, payment_method_id):
+    # asocia el cliente con el método de pago
+    stripe.PaymentMethod.attach(
+        payment_method_id=payment_method_id,
+        customer=client_id
+    )
+
+    print('método de pago asociado al usuario')
+
+
+# Prueba
+client_id = create_user(name='Pepito Perez', email='pepito@example.com')
+
 payment_method_id=create_payment_method()
-create_payment(payment_method_id=payment_method_id)
+
+add_payment_method_to_user(
+    client_id=client_id, 
+    payment_method_id=payment_method_id
+)
+
+create_payment(
+    client_id=client_id, 
+    payment_method_id=payment_method_id
+)
